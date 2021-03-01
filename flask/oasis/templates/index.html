@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script>
+        function uploadFile() {
+            var form = $('#FILE_FORM')[0];
+            var formData = new FormData(form);
+            var label = "Lable"
+            formData.append("file", $("#FILE_TAG")[0].files[0]);
+
+            var settings = {
+                "url": "/asr",
+                "method": "POST",
+                "timeout": 0,
+                "processData": false,
+                "mimeType": "multipart/form-data",
+                "contentType": false,
+                "data": formData
+            };
+
+            $.ajax(settings).done(function (response) {
+                var label = JSON.parse(response)['transcription']
+                document.getElementById('label').innerHTML = label
+
+            });
+        }
+
+        $(function () {
+            $("#FILE_TAG").on('change', function () {
+
+                readURL(this);
+            });
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#srcimg').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <!-- <form id="FILE_FORM" method="post" enctype="multipart/form-data">
+        <input type="file" id="FILE_TAG" name="FILE_TAG">
+        <a class="ui-shadow ui-btn ui-corner-all" href="javascript:uploadFile();">전송</a>
+    </form> -->
+
+
+    <div id="controls">
+        <button id="recordButton">Record</button>
+        <button id="pauseButton" disabled>Pause</button>
+        <button id="stopButton" disabled>Stop</button>
+    </div>
+
+    <div id="formats">Format: start recording to see sample rate</div>
+    <p><strong>Recordings:</strong></p>
+    <ol id="recordingsList"></ol>
+
+    <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+
+
+    <hr>
+    <h3 id="label">Speech Recognition</h3>
+
+</body>
+
+</html>
