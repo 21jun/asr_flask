@@ -7,7 +7,7 @@
 
 * first, place wav2vec2 model file under `flask/checkpoint`
 
-* seconde run command at project root dir (asr_flask)
+* second, run command at project root dir (asr_flask)
 
 ```sh
 cd flask
